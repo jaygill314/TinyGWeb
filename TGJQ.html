@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <title> Tiny G Web Server </title>
+        <script type="text/javascript" src="/static/jquery-1.5.min.js" > </script>
+        <script type="text/javascript" src="/static/jquery.terminal-0.3.4.min.js"> </script>
+        <link href="/static/jquery.terminal.css" rel="stylesheet" />
+
+    <style type="text/css">
+        div.ex
+            {
+            width:400px;
+            height: 300px;
+            padding:10px;
+            border:1px solid green;
+            margin:0px;
+            }
+    </style>
+ <!--   
+    <script type="text/javascript">
+  function loadXMLDoc(command)
+        {
+            if(typeof xmlhttp=="undefined"){
+                var xmlhttp;
+                if (window.XMLHttpRequest)
+                    {// code for IE7+, Firefox, Chrome, Opera, Safari
+                        xmlhttp=new XMLHttpRequest();
+                    }
+                    else
+                        {// code for IE6, IE5
+                            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                        }
+            }
+            xmlhttp.onreadystatechange=function()
+              {
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                    {
+                        alert(xmlhttp.responseText);
+                        return xmlhttp.responseText;
+                    }
+                }
+            var cmd = "tg?" + command;
+            xmlhttp.open("GET",cmd,true);
+            xmlhttp.send();
+        }
+    </script>
+ -->   
+</head>
+
+<body>
+    <h3>TinyG 72</h3>
+    <DIV id='ret'></DIV>
+    <div id="term_demo" class= "ex"></div>
+    
+    <script>
+jQuery(function($, undefined) {
+    $('#term_demo').terminal(function(command, term) {  
+        var url
+        if (command.indexOf("server")==0) {
+            urlstr = "http://localhost:8888/" + command
+        }
+        else {
+            urlstr =  "http://localhost:8888/" + "tg?" + command
+        }
+
+        $.ajax({
+            url: urlstr,
+            type: "GET",
+            success: function(data, xhr ) {
+                toks = data.split('\n');
+                $.each( toks,function( index,value) {
+                    if (value.indexOf('>')> 1) {
+                        term.set_prompt(value);
+                        }
+                    else {
+                        term.echo(value);  
+                    }
+                });
+            }
+        }), 
+        {
+        greetings: 'TinyG Web Interpreter',
+        name: 'js_demo',
+        height: 200,
+        prompt: 'tg>'
+        };
+    });
+});
+
+    
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>JQuery Terminal Emulator Demo</title>
+  <script src="../../jquery.js"></script>
+  <script src="../js/jquery-1.5.min.js"></script>
+  <script src="../js/jquery.mousewheel.min.js"></script>
+  <script src="../js/jquery.terminal-0.3.4.min.js"></script>
+  <link href="../css/jquery.terminal.css" rel="stylesheet"/>
+
+    <script type="text/javascript">
+    jQuery(function($, undefined) {
+    $('#term_demo').terminal(function(command, term) {
+        var result = window.eval(command);
+        if (result != undefined) {
+            term.echo(String(result));
+        }
+    }, {
+        greetings: 'Javascript Interpreter',
+        name: 'js_demo',
+        height: 200,
+        prompt: 'js>'});
+    </script>
+});
+</head>
+<body>
+    <div id="tilda"></div>
+    <h1>This is demo of JQuery Terminal Emulator, type tilda to open terminal</h1>
+    
+</body>
+</html>

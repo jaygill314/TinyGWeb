@@ -1,0 +1,13 @@
+import serial
+
+ser = serial.Serial()
+ser.port = '/dev/tty.usbserial-A700fhWc'
+ser.baudrate= 115200
+ser.xonxoff = True
+ser.timeout = 10
+ser.open()
+ser.isOpen()
+print ser
+ser.write("go x0 y0 z0 \r\n")
+
+    

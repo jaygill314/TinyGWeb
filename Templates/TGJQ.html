@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd"
+    >
+<html lang="en">
+<head>
+    <title> Tiny G Web Server </title>
+   
+    <!-- Terminal Files  <script type="text/javascript" src="JQuery/jquery.js"></script>-->     
+        <script src="JCubicTerm/js/jquery-1.5.min.js"></script>
+        <script src="JCubicTerm/js/jquery.terminal-0.3.4.min.js"></script>
+        <link href="JCubicTerm/css/jquery.terminal.css" rel="stylesheet"/>
+
+    <style type="text/css">
+        div.ex
+            {
+            width:400px;
+            height: 300px;
+            padding:10px;
+            border:1px solid green;
+            margin:0px;
+            }
+    </style>
+    <script type="text/javascript">
+  function loadXMLDoc(command)
+        {
+            if(typeof xmlhttp=="undefined"){
+                var xmlhttp;
+                if (window.XMLHttpRequest)
+                    {// code for IE7+, Firefox, Chrome, Opera, Safari
+                        xmlhttp=new XMLHttpRequest();
+                    }
+                    else
+                        {// code for IE6, IE5
+                            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+                        }
+            }
+            xmlhttp.onreadystatechange=function()
+              {
+                if (xmlhttp.readyState==4 && xmlhttp.status==200)
+                    {   
+                        return xmlhttp.responseText;
+                    }
+                }
+            var cmd = "tg?" + command;
+            alert(cmd); 
+            xmlhttp.open("GET",cmd,true);
+            xmlhttp.send();
+        }
+    </script>
+</head>
+
+<body>
+    <h3>TinyG 72</h3>
+<!--
+    <form action= "http://localhost:8889" method="get">
+    <input type="text" id="inp" />
+    <input type="button" onclick='loadXMLDoc()' value="Run" />
+    </form>
+    $(document).ready(function () {
+-->       
+    <DIV id='ret'></DIV>
+    <div id="term_demo" class= "ex"></div>
+    
+    <script>
+jQuery(function($, undefined) {
+    $('#term_demo').terminal(function(command, term) {
+        var result = window.eval(command);
+        loadXMLDoc(command);
+        if (result != undefined) {
+            term.echo(String(result));
+        }
+    }, 
+        {
+        greetings: 'TinyG Interpreter',
+        name: 'js_demo',
+        height: 200,
+        context: 
+        prompt: 'tg>'});
+});
+    
+    </script>
+</body>
+</html>
