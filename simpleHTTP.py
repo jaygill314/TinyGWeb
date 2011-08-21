@@ -6,6 +6,7 @@ import json
 import sys
 import glob
 
+
 class Port():
     """ Port - Class maintains all functions for dealing with a serial port
         ser - is the serial port object from serial.py  most of the function acts as a psss through
@@ -157,7 +158,9 @@ class ServerHandler(tornado.web.RequestHandler):
         print "Command: " +  self.request.query
         commands =  {
             "ListPorts": self.ListPorts,
-            "OpenPort": self.OpenPort
+            "OpenPort": self.OpenPort,
+            "SaveConfig" : self.SaveConfig,
+            "LoadConfig" : self.LoadConfig
             }
 
         toks = self.request.query.split("&")
@@ -186,6 +189,26 @@ class ServerHandler(tornado.web.RequestHandler):
             self.write( "Port: " + p.ser.port + " is Open")
         else:        
             self.write( "Port: " + p.ser.port + " is NOT open")
+
+    def LoadConfig(self,arg):   
+        f = open(os.path.join(os.getcwd(),"serverconfig.json"),"r")
+        config = json.load(f)
+        f.close()
+        p.OpenPort(str(config["ServerConfig"]["PortName"]))
+        
+        
+
+    def SaveConfig(self,arg):
+        config = """{\"ServerConfig\": {      
+           \"PortName\": \"/dev/tty.usbserial-A700fhWc\"
+           }
+        }"""
+        print "SaveConfig-" + config
+        f = open("serverconfig.json","w")
+        f.write(config)
+        self.write(config)
+        f.close
+        
 #  To Do
 # deal with security?
 # build in generic web page support?
@@ -200,7 +223,18 @@ application = tornado.web.Application([
     ],debug=True,autoescaping=True,static_path=os.path.join(os.getcwd(), "static"),)
 
 #Add optional args for baud etc.
-p = Port('/dev/tty.usbserial-A700fhWc')
+try:
+        f = open(os.path.join(os.getcwd(),"serverconfig.json"),"r")
+        config = json.load(f)
+        f.close()
+        print config
+        PortName = str(config["ServerConfig"]["PortName"]   )
+        p = Port(PortName)
+        print "Port Opened from Config"
+except:   
+    p = Port('/dev/tty.usbserial-A700fhWc')
+    print "Port Opened directly"
+    
 
 if __name__ == "__main__":   
     application.listen(8888)    
